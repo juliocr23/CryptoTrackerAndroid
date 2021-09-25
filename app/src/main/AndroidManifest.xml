@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CryptoTracker">
         <activity
-            android:name=".MainActivity"
+            android:name=".controller.AssetsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".controller.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
