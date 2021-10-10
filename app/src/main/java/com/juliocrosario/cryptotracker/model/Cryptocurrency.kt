@@ -1,6 +1,21 @@
 package com.juliocrosario.cryptotracker.model
 
-class Cryptocurrency(val id:String,val name:String, val symbol:String, var price:Double) {
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
+@Entity
+data class Cryptocurrency(
+
+    @PrimaryKey val id:String,
+    val name:String,
+    val symbol:String,
+    var description:String?,
+    var algorithm: String?,
+    var proofType: String?,
+    var sortOrder: String?,
+    var imageUrl: String?) {
 
     var change24H: Double? = null
     var highDay:   Double? = null
@@ -9,6 +24,8 @@ class Cryptocurrency(val id:String,val name:String, val symbol:String, var price
     var supply:    Double? = null
     var volume24H: Double? = null
 
-    //Icon
-    var imgData: Int? = null
+    var price:Double? = null
 }
+
+
+
