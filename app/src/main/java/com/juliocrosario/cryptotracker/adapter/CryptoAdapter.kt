@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.net.URL
 
 
-class CryptoAdapter(private val context: Context, private val cryptocurrencies:ArrayList<Cryptocurrency>):
+class CryptoAdapter(private val context: Context, private val cryptocurrencies:List<Cryptocurrency>):
   RecyclerView.Adapter<CryptoAdapter.ViewHolder>(){
 
      class ViewHolder(view: View): RecyclerView.ViewHolder(view){

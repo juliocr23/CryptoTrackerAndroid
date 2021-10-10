@@ -18,7 +18,7 @@ import kotlin.collections.HashMap
 class CryptocurrencyViewModel(application: Application): AndroidViewModel(application) {
 
     val output: MutableLiveData<List<Cryptocurrency>> = MutableLiveData()
-    val market:String = "USD"
+    private val market:String = "USD"
 
     private  var assets: HashMap<String,Cryptocurrency> = HashMap()
     private  var requestQueue:Queue<Cryptocurrency> = LinkedList()
@@ -35,7 +35,8 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
         if(cryptoList.isEmpty()){
             val coinList = repository.downloadCoinList()
             cryptoList = parseCoinList(coinList.string())
-            repository.saveCryptos(cryptoList)
+        }else{
+            output.postValue(cryptoList)
         }
 
         requestQueue.addAll(cryptoList)
@@ -49,6 +50,7 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
         viewModelScope.launch {
 
             loadData()
+            val temp = ArrayList<Cryptocurrency>()
             while(requestQueue.isNotEmpty()){
 
                 val request  = getRequest()
@@ -60,10 +62,18 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
 
                     assets[key]?.price = jsonObject.getJSONObject(key).optDouble(market)
 
-                    if(assets[key] != null)
+                    if(assets[key] != null && assets[key]!!.price != null) {
                         processedAssets.add(assets[key]!!)
+                        temp.add(assets[key]!!)
+                    }
                 }
                 output.postValue(processedAssets)
+            }
+
+            if(repository.readAllData().isNullOrEmpty()){
+                repository.saveCryptos(temp)
+            }else{
+                repository.updateCryptos(temp)
             }
         }
     }

@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var cryptoViewModel: CryptocurrencyViewModel
     private lateinit var adapter: CryptoAdapter
-    private var list: ArrayList<Cryptocurrency>? = null
+    private var hashSet: HashSet<Cryptocurrency>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,21 +30,25 @@ class MainActivity : AppCompatActivity() {
 
         cryptoViewModel.output.observe(this, androidx.lifecycle.Observer { response ->
 
-            if(list.isNullOrEmpty()){
-                list = ArrayList()
-                list!!.addAll(response)
+            if(hashSet.isNullOrEmpty()){
+                hashSet = HashSet()
+                hashSet!!.addAll(response)
                 listView()
             }else {
-                list!!.addAll(response)
+
+                if(hashSet!!.containsAll(response)){
+                    hashSet!!.removeAll(response)
+                }
+                hashSet!!.addAll(response)
                 adapter.notifyDataSetChanged()
             }
-            Log.e("Size ", list!!.size.toString())
+            Log.e("Size ", hashSet!!.size.toString())
         })
     }
 
     private fun listView(){
         binding.recyclerViewCrypto.layoutManager = LinearLayoutManager(this)
-        adapter = CryptoAdapter(this,list!!)
+        adapter = CryptoAdapter(this,hashSet!!.toList())
         binding.recyclerViewCrypto.adapter = adapter
     }
 
