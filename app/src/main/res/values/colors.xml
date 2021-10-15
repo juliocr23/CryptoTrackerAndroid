@@ -11,5 +11,6 @@
     <color name="price_color">#171717</color>
     <color name="name_color">#FFFFFFFF</color>
     <color name="Symbol_name_color">#C9CCD5</color>
-    <color name="asset_color">#2C3872</color>
+    <color name="theme_color">#2C3872</color>
+    <color name="asset_color">#5563A1</color>
 </resources>

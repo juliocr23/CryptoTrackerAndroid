@@ -21,6 +21,9 @@ interface CryptocurrencyDao {
     @Query("DELETE FROM Cryptocurrency")
     suspend fun deleteAll()
 
+    @Query("SELECT * FROM Cryptocurrency WHERE name LIKE :searchQuery OR symbol LIKE :searchQuery")
+    fun searchCryptos(searchQuery: String): LiveData<List<Cryptocurrency>>
+
     @Query("SELECT * FROM Cryptocurrency")
     suspend fun readAllData(): List<Cryptocurrency>
 }

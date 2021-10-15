@@ -3,6 +3,7 @@ package com.juliocrosario.cryptotracker.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.juliocrosario.cryptotracker.api.CryptoCompareAPI.Companion.IMAGE_URL
@@ -19,7 +20,6 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
 
     val output: MutableLiveData<List<Cryptocurrency>> = MutableLiveData()
     private val market:String = "USD"
-
     private  var assets: HashMap<String,Cryptocurrency> = HashMap()
     private  var requestQueue:Queue<Cryptocurrency> = LinkedList()
     private  var repository: CryptoRepository
@@ -28,7 +28,6 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
         val cryptocurrencyDao = CryptocurrencyDB.getDatabase(application).cryptocurrencyDao()
         repository = CryptoRepository(cryptocurrencyDao)
     }
-
     private suspend fun loadData(){
 
         var cryptoList = repository.readAllData()
@@ -43,6 +42,10 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
         for(crypto in cryptoList) {
              assets[crypto.symbol] = crypto
          }
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Cryptocurrency>>{
+        return repository.searchCryptos(searchQuery)
     }
 
     fun getCryptos(){
@@ -69,7 +72,6 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
                 }
                 output.postValue(processedAssets)
             }
-
             if(repository.readAllData().isNullOrEmpty()){
                 repository.saveCryptos(temp)
             }else{

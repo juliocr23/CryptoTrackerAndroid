@@ -1,5 +1,6 @@
 package com.juliocrosario.cryptotracker.repository
 
+import androidx.lifecycle.LiveData
 import com.juliocrosario.cryptotracker.api.RetrofitInstance
 import com.juliocrosario.cryptotracker.model.Cryptocurrency
 import com.juliocrosario.cryptotracker.model.CryptocurrencyDao
@@ -16,6 +17,11 @@ class CryptoRepository(private val cryptocurrencyDao: CryptocurrencyDao) {
     suspend fun updateCryptos(list: List<Cryptocurrency>){
         cryptocurrencyDao.updateCryptos(list)
     }
+
+    fun searchCryptos(searchQuery: String): LiveData<List<Cryptocurrency>>{
+       return cryptocurrencyDao.searchCryptos(searchQuery)
+    }
+
     suspend fun deleteCrypto(cryptocurrency: Cryptocurrency){
         cryptocurrencyDao.deleteCrypto(cryptocurrency)
     }

@@ -4,9 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.AssetsActivity"
+    tools:context=".view.AssetsFragment"
+    android:orientation="vertical"
     >
+    <include  layout="@layout/search_bar"/>
 
-
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCrypto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

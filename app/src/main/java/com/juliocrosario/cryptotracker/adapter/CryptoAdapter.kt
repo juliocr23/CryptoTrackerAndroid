@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.net.URL
 
 
-class CryptoAdapter(private val context: Context, private val cryptocurrencies:List<Cryptocurrency>):
+class CryptoAdapter(private val context: Context, private var cryptocurrencies:List<Cryptocurrency>):
   RecyclerView.Adapter<CryptoAdapter.ViewHolder>(){
 
      class ViewHolder(view: View): RecyclerView.ViewHolder(view){
@@ -29,6 +29,10 @@ class CryptoAdapter(private val context: Context, private val cryptocurrencies:L
       val symbolTV: TextView   = view.findViewById(R.id.symbolTV)
       val priceTV: TextView    = view.findViewById(R.id.priceTV)
       val imageView: ImageView = view.findViewById(R.id.cryptoIV)
+    }
+
+    fun setData(list: List<Cryptocurrency>){
+        cryptocurrencies = list
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
