@@ -52,6 +52,9 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
 
         viewModelScope.launch {
 
+         //   repository.deleteAll()
+
+
             loadData()
             val temp = ArrayList<Cryptocurrency>()
             while(requestQueue.isNotEmpty()){
@@ -102,7 +105,7 @@ class CryptocurrencyViewModel(application: Application): AndroidViewModel(applic
             val temp = data[key] as JSONObject
 
             val crypto = Cryptocurrency(temp.optString("Id"),
-                                        temp.optString("Name"),
+                                        temp.optString("CoinName"),
                                         temp.optString("Symbol"),
                                         temp.optString("Description"),
                                         temp.optString("Algorithm"),
