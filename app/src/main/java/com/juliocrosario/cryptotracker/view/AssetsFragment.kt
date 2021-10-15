@@ -1,11 +1,14 @@
 package com.juliocrosario.cryptotracker.view
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.SearchView
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,11 +30,8 @@ class AssetsFragment :Fragment(R.layout.fragment_assets) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentAssetsBinding.bind(view)
         this.binding = binding
-    }
 
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
+        setSearchBar()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,32 +59,51 @@ class AssetsFragment :Fragment(R.layout.fragment_assets) {
         })
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu, menu)
-//        val search = menu.findItem(R.id.appSearchBar)
-//        val searchView = search.actionView as SearchView
-//        searchView.queryHint = "Search"
-//        searchView.isSubmitButtonEnabled = true
-//        searchView.setOnQueryTextListener(this)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
 
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
+
+    private fun setSearchBar(){
+
+
+        binding?.searchBar?.searchBar?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+               if(start >= 0) {
+                   binding!!.searchBar.searchIcon.tag = R.drawable.cancel
+                   binding!!.searchBar.searchIcon.setImageResource(R.drawable.cancel)
+               }
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDatabase(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {
+                if(s != null && s.isEmpty()){
+                    binding!!.searchBar.searchIcon.tag = R.drawable.drop_down
+                    binding!!.searchBar.searchIcon.setImageResource(R.drawable.drop_down)
+
+                }
+            }
+        })
+        setSearchCancelListener()
+    }
+
+
+    private fun setSearchCancelListener(){
+        binding!!.searchBar.searchIcon.setOnClickListener {
+            val tag = binding?.searchBar?.searchIcon?.tag as Int
+            if(  tag == R.drawable.cancel)
+                binding?.searchBar?.searchBar?.setText("")
+        }
+    }
     private fun listView(){
         binding!!.recyclerViewCrypto.layoutManager = LinearLayoutManager(requireContext())
         adapter = CryptoAdapter(requireContext(),hashSet!!.toList())
         binding!!.recyclerViewCrypto.adapter = adapter
     }
-
-//    override fun onQueryTextSubmit(query: String?): Boolean {
-//        return true
-//    }
-//
-//    override fun onQueryTextChange(query: String?): Boolean {
-//        if(query != null){
-//            searchDatabase(query)
-//        }
-//        return true
-//    }
 
     private fun searchDatabase(query: String){
         val searchQuery = "%$query%"
